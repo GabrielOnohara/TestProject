@@ -1,8 +1,18 @@
 # Makefile for Docker Compose
 
 # Default target
+bash:
+	docker exec -it falcon-app /bin/bash
+
+
+build:
+	docker-compose build app
+
 up:
-	docker-compose up --build
+	docker-compose up app --build
+
+restart:
+	docker-compose restart app
 
 # Optional target to stop and remove containers
 down:

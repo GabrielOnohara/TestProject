@@ -20,7 +20,9 @@ services:
       - db
     ports:
       - "8000:8000"
-    command: ["gunicorn", "-b", "0.0.0.0:8000", "app:app"]
+    command: ["gunicorn", "-b", "0.0.0.0:8000", "--reload", "app:app"]
+    volumes:
+      - .:/app 
     restart: on-failure
 
 volumes:
