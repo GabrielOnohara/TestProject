@@ -1,5 +1,5 @@
 falcon
-sqlalchemy
-psycopg2-binary
 uvicorn
 gunicorn
+sqlalchemy
+psycopg2-binary
