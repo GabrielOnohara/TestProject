@@ -22,6 +22,6 @@ class UserResource:
         session.close()
 
 # app = falcon.asgi.App()
-seed_users()  # Seed the users before running the app
+seed_users()
 app = falcon.App()
 app.add_route('/users', UserResource())
