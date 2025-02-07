@@ -2,6 +2,7 @@ import falcon
 from sqlalchemy.orm import scoped_session
 from db import Session
 from models import User
+from seeds import seed_users
 
 class UserResource:
     def on_get(self, req, resp):
@@ -21,5 +22,6 @@ class UserResource:
         session.close()
 
 # app = falcon.asgi.App()
+seed_users()  # Seed the users before running the app
 app = falcon.App()
 app.add_route('/users', UserResource())
