@@ -1,0 +1,5 @@
+falcon
+sqlalchemy
+psycopg2-binary
+uvicorn
+gunicorn

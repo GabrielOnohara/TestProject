@@ -1,14 +1,12 @@
-# Makefile
-
-# Define the image name
-IMAGE_NAME = berndverst/falcon
-
-# Define the port mapping
-HOST_PORT = 8080
-CONTAINER_PORT = 80
+# Makefile for Docker Compose
 
 # Default target
-.PHONY: run
+up:
+	docker-compose up --build
 
-run:
-	docker run -it -p $(HOST_PORT):$(CONTAINER_PORT) $(IMAGE_NAME)
+# Optional target to stop and remove containers
+down:
+	docker-compose down
+
+postgresdb:
+	docker-compose exec db psql -U myuser -d mydatabase
