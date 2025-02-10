@@ -12,38 +12,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      db:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-          POSTGRES_DB: mydatabase
-        options: --health-cmd="pg_isready -U myuser" --health-interval=10s --health-timeout=5s --health-retries=5
-
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+    - name: Check out code
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.10'
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
 
-      - name: Run database migrations
-        run: |
-          docker-compose up -d db  # Inicializa o banco de dados
+    - name: Start Docker Compose services
+      run: |
+        docker-compose -f docker-compose.yml up -d db  # Inicializa o banco de dados
 
-      - name: Run tests with pytest
-        run: |
-          pytest --maxfail=1 --disable-warnings -q  # Executa os testes com pytest
+    - name: Run tests
+      run: |
+        docker-compose exec app pytest spec
 
-      - name: Tear down Docker containers
-        run: docker-compose down  # Desmonta e limpa os containers
+    - name: Stop and remove containers
+      run: docker-compose down
