@@ -2,6 +2,8 @@ curl localhost:8000/
 
 USERS
 curl localhost:8000/users
+curl "localhost:8000/users?name=j"
+
 curl -X POST http://localhost:8000/users \
     -H "Content-Type: application/json" \
     -d '{"name": John Sena", "email": "john.sena@example.com"}'

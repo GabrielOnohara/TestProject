@@ -5,9 +5,24 @@ from models import User
 class UserResource:
     def on_get(self, req, resp):
         session = Session()
-        users = session.query(User).all()
+
+        users = self.filter_users(session, req)
+        
         resp.media = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
         session.close()
+
+    def filter_users(self, session, req):
+        name = req.get_param('name')
+        email = req.get_param('email')
+        query = session.query(User)
+
+        if name:
+            query = query.filter(User.name.ilike(f"%{name}%"))
+
+        if email:
+            query = query.filter(User.email.ilike(f"%{email}%"))
+
+        return query.all()
 
     def on_post(self, req, resp):
         session = Session()
