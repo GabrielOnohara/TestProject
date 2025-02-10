@@ -1,5 +1,17 @@
 curl localhost:8000/
-curl localhost:8000/pets
-curl localhost:8000/users
-curl localhost:8000/user_pets
 
+USERS
+curl localhost:8000/users
+curl -X POST http://localhost:8000/users \
+    -H "Content-Type: application/json" \
+    -d '{"name": John Sena", "email": "john.sena@example.com"}'
+
+curl -X PUT http://localhost:8000/users/1 \
+    -H "Content-Type: application/json" \
+    -d '{"name": "John Updated", "email": "john.updated@example.com"}'
+
+curl -X DELETE http://localhost:8000/users/1
+
+curl localhost:8000/pets
+
+curl localhost:8000/user_pets
