@@ -1,0 +1,5 @@
+curl localhost:8000/
+curl localhost:8000/pets
+curl localhost:8000/users
+curl localhost:8000/user_pets
+
