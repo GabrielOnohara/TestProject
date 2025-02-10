@@ -5,7 +5,7 @@ from db import get_engine
 def seed_users():
     session = sessionmaker(bind=get_engine())()
     try:
-        if session.query(User).count() == 0:
+        if session.query(User).count() <= 1:
             for i in range(1, 11):
                 user = User(name=f"User {i}", email=f"user{i}@example.com")
                 session.add(user)

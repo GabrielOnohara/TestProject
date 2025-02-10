@@ -6,7 +6,7 @@ def seed_pets():
     session = sessionmaker(bind=get_engine())()
     try:
         # Check if pets already exist (to avoid seeding duplicate pets)
-        if session.query(Pet).count() == 0:
+        if session.query(Pet).count() <= 1:
             # Get all the users in the database
             users = session.query(User).all()
             
