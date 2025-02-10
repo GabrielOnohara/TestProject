@@ -25,16 +25,18 @@ jobs:
         sudo apt-get install -y docker-compose
 
     - name: Start Docker Compose services
-      run: |
-        docker-compose -f docker-compose.yml up -d db  # Inicializa o banco de dados
+      run: docker-compose -f docker-compose.yml up -d db
 
     - name: Check if app container is running
-      run: docker ps
+      run: docker-compose ps
 
-    - name: Check pytest availability in app container
-      run: docker-compose exec app pytest --version
+    - name: Check pytest version with verbosity
+      run: docker-compose exec app pytest --version -v
 
-    - name: Run tests with more verbosity
+    - name: Install pytest inside app container
+      run: docker-compose exec app pip install pytest
+
+    - name: Run tests with verbosity
       run: docker-compose exec app pytest spec --maxfail=5 --disable-warnings -v
 
     - name: Stop and remove containers
