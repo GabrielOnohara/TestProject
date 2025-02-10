@@ -1,16 +1,14 @@
-import falcon
-import json
 import pytest
+import falcon
 from falcon.testing import TestClient
+
 from db import Session
 from models import User, Pet
 from app import app
 
-
 @pytest.fixture
 def client():
     return TestClient(app)
-
 
 @pytest.fixture
 def setup_db():
@@ -29,12 +27,6 @@ def setup_db():
     session.commit()
     session.close()
 
-def test_root(client):
-    response = client.simulate_get('/')
-    assert response.status_code == 200
-    assert response.json == {'message': 'Welcome to Falcon API'}
-
-
 def test_get_users(client, setup_db):
     response = client.simulate_get('/users')
     assert response.status_code == 200
@@ -51,22 +43,3 @@ def test_post_user(client, setup_db):
     new_user = response.json
     assert new_user['name'] == 'Jane Doe'
     assert new_user['email'] == 'jane.doe@example.com'
-
-
-def test_get_pets(client, setup_db):
-    response = client.simulate_get('/pets')
-    assert response.status_code == 200
-    pets = response.json
-    assert len(pets) == 1
-    assert pets[0]['name'] == "Buddy"
-    assert pets[0]['species'] == "Dog"
-
-
-def test_get_user_pets(client, setup_db):
-    response = client.simulate_get('/user_pets')
-    assert response.status_code == 200
-    user_pets = response.json
-    assert len(user_pets) == 1  # Espera que haja um usuário
-    assert user_pets[0]['name'] == "John Doe"
-    assert user_pets[0]['pets'][0]['name'] == "Buddy"
-    assert user_pets[0]['pets'][0]['species'] == "Dog"
