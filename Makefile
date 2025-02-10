@@ -9,14 +9,17 @@ build:
 	docker-compose build app
 
 up:
-	docker-compose up app --build
+	docker-compose up app
 
 restart:
 	docker-compose restart app
 
-# Optional target to stop and remove containers
 down:
 	docker-compose down
 
 postgresdb:
 	docker-compose exec db psql -U myuser -d mydatabase
+
+test:
+	ENVIRONMENT=test docker-compose up app -d
+	make bash
