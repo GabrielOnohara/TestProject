@@ -1,4 +1,4 @@
-name: Run tests with Docker and Database
+name: Run Tests with Docker and Docker Compose
 
 on:
   push:
@@ -28,9 +28,14 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml up -d db  # Inicializa o banco de dados
 
-    - name: Run tests
-      run: |
-        docker-compose exec app pytest spec
+    - name: Check if app container is running
+      run: docker ps
+
+    - name: Check pytest availability in app container
+      run: docker-compose exec app pytest --version
+
+    - name: Run tests with more verbosity
+      run: docker-compose exec app pytest spec --maxfail=5 --disable-warnings -v
 
     - name: Stop and remove containers
       run: docker-compose down
