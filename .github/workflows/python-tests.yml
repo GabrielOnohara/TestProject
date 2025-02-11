@@ -28,17 +28,17 @@ jobs:
       run: docker-compose -f docker-compose.yml up -d db
 
     - name: Install pytest inside app container
-      run: docker-compose exec -T app pip install pytest
+      run: docker-compose exec -T falcon-app pip install pytest
 
     - name: Wait for db service to initialize
       run: |
-        docker-compose exec -T app bash -c "until nc -z db 5432; do echo 'Waiting for database connection...'; sleep 5; done"
+        docker-compose exec -T falcon-app bash -c "until nc -z db 5432; do echo 'Waiting for database connection...'; sleep 5; done"
 
     - name: Check pytest version with verbosity
-      run: docker-compose exec -T app pytest --version -v
+      run: docker-compose exec -T falcon-app pytest --version -v
 
     - name: Run tests with verbosity
-      run: docker-compose exec -T app pytest spec --maxfail=5 --disable-warnings -v
+      run: docker-compose exec -T falcon-app pytest spec --maxfail=5 --disable-warnings -v
 
     - name: Stop and remove containers
       run: docker-compose
