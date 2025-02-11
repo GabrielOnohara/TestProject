@@ -12,21 +12,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      db:
-        image: postgres:13
-        env:
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-          POSTGRES_DB: mydatabase
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U myuser"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -41,11 +26,11 @@ jobs:
 
       - name: Build and run Docker Compose
         run: |
-          docker-compose up --build
-          # Wait for the database to be ready
+          docker-compose up --build -d
+          # Aguardar até que o banco de dados esteja pronto
           until docker exec postgres-db pg_isready -U myuser; do
-            echo "Waiting for database to be ready..."
-            sleep 2
+            echo "Esperando o banco de dados ficar pronto..."
+            sleep 5
           done
 
       - name: Run tests
