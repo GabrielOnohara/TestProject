@@ -16,4 +16,4 @@ curl -X DELETE http://localhost:8000/users/1
 
 curl localhost:8000/pets
 
-curl localhost:8000/user_pets
+curl localhost:8000/user/1/pets

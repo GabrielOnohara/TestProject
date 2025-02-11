@@ -22,18 +22,19 @@ def setup_db():
     user = User(name="John Doe", email="john.doe@example.com")
     pet = Pet(name="Buddy", species="Dog")
     user.pets.append(pet)
-
     session.add(user)
     session.add(pet)
     session.commit()
+    user_id = user.id
+
     session.close()
+    return user_id
 
 
 def test_get_user_pets(client, setup_db):
-    response = client.simulate_get('/user_pets')
+    user_id = setup_db
+    response = client.simulate_get(f'/users/{user_id}/pets')
     assert response.status_code == 200
     user_pets = response.json
-    assert len(user_pets) == 1  # Espera que haja um usuário
-    assert user_pets[0]['name'] == "John Doe"
-    assert user_pets[0]['pets'][0]['name'] == "Buddy"
-    assert user_pets[0]['pets'][0]['species'] == "Dog"
+    assert user_pets[0]['name'] == "Buddy"
+    assert user_pets[0]['species'] == "Dog"

@@ -1,20 +1,17 @@
 from db import Session
 from models import User, Pet
 from sqlalchemy.orm import joinedload
+from sqlalchemy.exc import NoResultFound
 
 class UserPetsResource:
-    def on_get(self, req, resp):
+    def on_get(self, req, resp, user_id):
         session = Session()
-        users = session.query(User).options(joinedload(User.pets)).all()
-        users_resp = []
-        for user in users:
-            user_obj = {'id': user.id, 'name': user.name, 'email': user.email, 'pets': []}
-            for pet in user.pets:
-                user_obj['pets'].append({
-                    'name': pet.name,
-                    'species': pet.species
-                })
-            users_resp.append(user_obj)
-        print(users_resp)
-        resp.media = users_resp
+        try:
+            user = session.query(User).filter(User.id == user_id).options(joinedload(User.pets)).one()
+            pets = [{'name': pet.name, 'species': pet.species} for pet in user.pets]
+            resp.media = pets
+        except NoResultFound:
+            resp.status = 404
+            resp.media = {'error': 'User not found'}
+
         session.close()
