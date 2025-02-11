@@ -10,9 +10,14 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
+# Copiar o script de entrypoint para o container
+COPY entrypoint.sh /entrypoint.sh
 
-# Run the Falcon app when the container launches
-# CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
-CMD ["gunicorn", "-b", "0.0.0.0:8000" , "--reload", "app:app"]
+# Tornar o script executável
+RUN chmod +x /entrypoint.sh
+
+# Definir o script como entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Expor a porta 8000 para o mundo exterior
+EXPOSE 8000

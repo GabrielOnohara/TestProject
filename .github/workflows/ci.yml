@@ -33,6 +33,10 @@ jobs:
             sleep 5
           done
 
+      - name: Run Alembic migrations
+        run: |
+          docker-compose exec -T app alembic upgrade head
+
       - name: Run tests
         run: |
           docker-compose exec -T app pytest

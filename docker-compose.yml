@@ -21,7 +21,7 @@ services:
       - db
     ports:
       - "8000:8000"
-    command: ["gunicorn", "-b", "0.0.0.0:8000", "--reload", "app:app"]
+    command: ["/entrypoint.sh"]
     volumes:
       - .:/app 
     restart: on-failure
