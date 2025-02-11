@@ -17,3 +17,7 @@ curl -X DELETE http://localhost:8000/users/1
 curl localhost:8000/pets
 
 curl localhost:8000/user/1/pets
+curl -X POST http://localhost:8000/users/1/pets \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Mittens", "species": "Cat"}'
+

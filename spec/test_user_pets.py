@@ -38,3 +38,12 @@ def test_get_user_pets(client, setup_db):
     user_pets = response.json
     assert user_pets[0]['name'] == "Buddy"
     assert user_pets[0]['species'] == "Dog"
+
+def test_post_user_pets(client, setup_db):
+    user_id = setup_db
+    new_pet_data = {'name': 'Garfield', 'species': 'Fat Cat'}
+    response = client.simulate_post(f'/users/{user_id}/pets', json=new_pet_data)
+    assert response.status_code == 201
+    user_pets = response.json
+    assert user_pets['name'] == "Garfield"
+    assert user_pets['species'] == "Fat Cat"
