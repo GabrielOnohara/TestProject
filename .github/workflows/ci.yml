@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main  # Change this to your default branch
   pull_request:
     branches:
-      - master
+      - main  # Change this to your default branch
 
 jobs:
   test:
@@ -33,6 +33,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       - name: Build and run Docker Compose
         run: |
