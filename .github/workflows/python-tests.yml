@@ -27,14 +27,15 @@ jobs:
     - name: Start Docker Compose services
       run: docker-compose -f docker-compose.yml up -d db
 
-    - name: Check if app container is running
-      run: docker-compose ps
+    - name: Install pytest inside app container
+      run: docker-compose exec app pip install pytest
+
+    - name: Wait for db service to initialize
+      run: |
+        docker-compose exec app bash -c "until nc -z db 5432; do echo 'Waiting for database connection...'; sleep 5; done"
 
     - name: Check pytest version with verbosity
       run: docker-compose exec app pytest --version -v
-
-    - name: Install pytest inside app container
-      run: docker-compose exec app pip install pytest
 
     - name: Run tests with verbosity
       run: docker-compose exec app pytest spec --maxfail=5 --disable-warnings -v
