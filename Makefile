@@ -11,6 +11,9 @@ build:
 up:
 	docker-compose up app
 
+upbuild:
+	docker-compose up app --build
+
 restart:
 	docker-compose restart app
 
