@@ -41,7 +41,7 @@ jobs:
 
       - name: Build and run Docker Compose
         run: |
-          docker-compose up -d
+          docker-compose up --build
           # Wait for the database to be ready
           until docker exec postgres-db pg_isready -U myuser; do
             echo "Waiting for database to be ready..."
