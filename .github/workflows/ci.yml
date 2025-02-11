@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch
+  pull_request:
+    branches:
+      - main  # Change this to your default branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: mydatabase
+        ports:
+          - 5432:5432
+        volumes:
+          - pgdata:/var/lib/postgresql/data
+        options: >-
+          --health-cmd "pg_isready -U myuser"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and run Docker Compose
+        run: |
+          docker-compose up -d
+          # Wait for the database to be ready
+          until docker exec postgres-db pg_isready -U myuser; do
+            echo "Waiting for database to be ready..."
+            sleep 2
+          done
+
+      - name: Run tests
+        run: |
+          docker-compose exec app pytest
+
+      - name: Stop and remove containers
+        run: docker-compose down
+
+volumes:
+  pgdata:
