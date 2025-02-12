@@ -7,7 +7,7 @@ class UserResource:
         session = Session()
 
         users = self.filter_users(session, req)
-        
+
         resp.media = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
         session.close()
 
@@ -48,7 +48,7 @@ class UserResource:
             resp.media = {'message': 'User not found'}
         session.close()
 
-    def on_delete(self, req, resp, user_id):
+    def on_delete(self, resp, user_id):
         session = Session()
         user = session.query(User).get(user_id)
         if user:
