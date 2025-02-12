@@ -1,5 +1,5 @@
-from db import get_engine
 from sqlalchemy.orm import declarative_base
+from db import get_engine
 
 Base = declarative_base()
 

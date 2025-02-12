@@ -1,4 +1,5 @@
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 from models import User
 from db import get_engine
 
@@ -13,7 +14,7 @@ def seed_users():
             print("10 users seeded successfully.")
         else:
             print("Users already exist in the database.")
-    except Exception as e:
+    except SQLAlchemyError as e:
         session.rollback()
         print(f"Error seeding users: {e}")
     finally:
