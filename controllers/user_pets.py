@@ -6,7 +6,7 @@ from db import Session
 from models import User, Pet
 
 class UserPetsResource:
-    def on_get(self, resp, user_id):
+    def on_get(self, _req, resp, user_id):
         session = Session()
         try:
             user = (

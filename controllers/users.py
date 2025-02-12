@@ -48,7 +48,7 @@ class UserResource:
             resp.media = {'message': 'User not found'}
         session.close()
 
-    def on_delete(self, resp, user_id):
+    def on_delete(self, _req, resp, user_id):
         session = Session()
         user = session.query(User).get(user_id)
         if user:
