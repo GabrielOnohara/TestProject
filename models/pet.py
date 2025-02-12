@@ -8,5 +8,7 @@ class Pet(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     species = Column(String, index=True)
+    age = Column(Integer, index=True)
+
     user_id = Column(Integer, ForeignKey('users.id'))
     owner = relationship("User", back_populates="pets")
