@@ -9,9 +9,8 @@ class UserResource(BaseResource):
 
         page_size, page_number = self.get_pagination_params(req)
         query = self.filter_users(session, req)
-
         users = query.offset((page_number - 1) * page_size).limit(page_size).all()
-        
+
         resp.media = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
         resp.status = falcon.HTTP_200
 
