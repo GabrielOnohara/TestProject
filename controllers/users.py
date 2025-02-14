@@ -1,14 +1,20 @@
 import falcon
 from db import Session
 from models import User
+from .base import BaseResource
 
-class UserResource:
+class UserResource(BaseResource):
     def on_get(self, req, resp):
         session = Session()
 
-        users = self.filter_users(session, req)
+        page_size, page_number = self.get_pagination_params(req)
+        query = self.filter_users(session, req)
 
+        users = query.offset((page_number - 1) * page_size).limit(page_size).all()
+        
         resp.media = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
+        resp.status = falcon.HTTP_200
+
         session.close()
 
     def filter_users(self, session, req):
@@ -22,7 +28,7 @@ class UserResource:
         if email:
             query = query.filter(User.email.ilike(f"%{email}%"))
 
-        return query.all()
+        return query
 
     def on_post(self, req, resp):
         session = Session()
